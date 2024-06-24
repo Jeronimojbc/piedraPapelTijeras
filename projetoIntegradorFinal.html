@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="juego">
+        <h1>Vamos brincar de Pedra, Papel e Tesoura!</h1>
+        <h2>Você acha que pode me vencer?</h2>
+        <br>
+        <div id="puntuacionTotal"></div>
+        <br>
+        <p>Faça sua escolha</p>
+        <button onclick="jugar('Pedra')">Pedra</button>
+        <button onclick="jugar('Papel')">Papel</button>
+        <button onclick="jugar('Tesoura')">Tesoura</button>
+        <br><br>
+        <div id="resultado"></div>
+        <br><br>
+    </div>
+    <div id="resultadoFinal"></div>
+    <br><br>
+    <div id="jugarDenuevo"></div>
+    <br>
+    <div id="historico"></div>
+
+    <script>
+        var historial = [];
+        var puntuacionJugador = 0;
+        var puntuacionComputador = 0;
+        var ganador = "";
+
+        function jugar(opcionJugador) {
+            var opciones = ["Pedra", "Papel", "Tesoura"];
+            var opcionComputador = opciones[Math.floor(Math.random() * 3)];
+            var resultado = "";
+
+            if (opcionJugador === opcionComputador) {
+                resultado = "Empate!!";
+            } else if (
+                (opcionJugador === "Pedra" && opcionComputador === "Tesoura") ||
+                (opcionJugador === "Papel" && opcionComputador === "Pedra") ||
+                (opcionJugador === "Tesoura" && opcionComputador === "Papel")
+            ) {
+                resultado = "Você Ganhou!"; puntuacionJugador++;
+
+            } else {
+                resultado = "Você perdeu!"; puntuacionComputador++;
+            }
+
+            document.getElementById("puntuacionTotal").innerText = `JOGADOR: ${puntuacionJugador}
+             COMPUTADOR: ${puntuacionComputador}`;
+
+            document.getElementById("resultado").innerText = `Sua escolha foi ${opcionJugador}
+            Eu escolho ${opcionComputador}. 
+        
+            ${resultado}`;
+
+            historial.push(resultado);
+
+            calcularPuntuacion();
+        };
+
+        function calcularPuntuacion() {
+            if (puntuacionJugador >= 3) {
+                ganador = "El Jugador";
+                finDelJuego();
+            }
+            else if (puntuacionComputador >= 3) {
+                ganador = "El Computador";
+                finDelJuego();
+            }
+        };
+
+        function jugarDenuevo() {
+            location.reload();
+        };
+
+        function mostrarPartidas() {
+            var historico = "";
+            for (let h = 0; h < historial.length; h++) {
+                historico += historial[h] + "<br>";
+            }
+            document.getElementById("historico").innerHTML = historico;
+        };
+
+        function finDelJuego() {
+            document.getElementById("juego").innerHTML = "";
+            document.getElementById("resultadoFinal").innerHTML = "Fin de la Partida" + "<br>" + ganador + " ganhou o jogo";
+            crearboton()
+        };
+
+        function crearboton() {
+            var nuevoJuego = document.createElement("button");
+            var contenedor = document.getElementById("jugarDenuevo");
+            var partidasAnteriores = document.createElement("button");
+            var contenedor2 = document.getElementById("historico");
+
+
+            nuevoJuego.textContent = "Jugar de nuevo";
+            nuevoJuego.addEventListener("click", jugarDenuevo);
+            contenedor.appendChild(nuevoJuego);
+
+            partidasAnteriores.textContent = "historico";
+            partidasAnteriores.addEventListener("click", mostrarPartidas);
+            contenedor2.appendChild(partidasAnteriores);
+        };
+
+
+
+    </script>
+</body>
+
+</html>
